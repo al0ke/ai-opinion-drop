@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Bot, Brain, MessageSquare, Send, Users, Sparkles, Zap, Heart, AlertTriangle, Trash2 } from "lucide-react";
+import { Bot, Brain, MessageSquare, Send, Users, Sparkles, Zap, Heart, AlertTriangle, Trash2, Wifi } from "lucide-react";
+import { db, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, Timestamp } from "@/lib/firebase";
 
 interface Opinion {
   id: string;
@@ -22,39 +23,67 @@ export default function AIOpinionDrop() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [isConnected, setIsConnected] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Load opinions from localStorage on mount
+  // Real-time Firestore subscription
   useEffect(() => {
-    const saved = localStorage.getItem("ai-opinions");
-    if (saved) {
-      setOpinions(JSON.parse(saved));
-    }
+    const q = query(collection(db, "opinions"), orderBy("timestamp", "desc"));
+    
+    const unsubscribe = onSnapshot(q, 
+      (snapshot) => {
+        const opinionsData: Opinion[] = snapshot.docs.map(doc => ({
+          id: doc.id,
+          name: doc.data().name,
+          partner: doc.data().partner,
+          stance: doc.data().stance,
+          opinion: doc.data().opinion,
+          timestamp: doc.data().timestamp?.toDate() || new Date()
+        }));
+        setOpinions(opinionsData);
+        setIsLoading(false);
+        setIsConnected(true);
+      },
+      (error) => {
+        console.error("Firestore error:", error);
+        setIsConnected(false);
+        setIsLoading(false);
+      }
+    );
+
+    return () => unsubscribe();
   }, []);
 
-  // Save to localStorage whenever opinions change
-  useEffect(() => {
-    localStorage.setItem("ai-opinions", JSON.stringify(opinions));
-  }, [opinions]);
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const newOpinion: Opinion = {
-      id: Date.now().toString(),
-      ...formData,
-      timestamp: new Date()
-    };
+    try {
+      await addDoc(collection(db, "opinions"), {
+        name: formData.name,
+        partner: formData.partner,
+        stance: formData.stance,
+        opinion: formData.opinion,
+        timestamp: Timestamp.now()
+      });
 
-    setOpinions([newOpinion, ...opinions]);
-    setFormData({ name: "", partner: "", stance: "beneficial", opinion: "" });
-    setIsSubmitting(false);
-    setShowSuccess(true);
-    setTimeout(() => setShowSuccess(false), 3000);
+      setFormData({ name: "", partner: "", stance: "beneficial", opinion: "" });
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 3000);
+    } catch (error) {
+      console.error("Error adding opinion:", error);
+      alert("Failed to submit. Please check your connection.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  const handleDelete = (id: string) => {
-    setOpinions(opinions.filter(o => o.id !== id));
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteDoc(doc(db, "opinions", id));
+    } catch (error) {
+      console.error("Error deleting opinion:", error);
+    }
   };
 
   const beneficialCount = opinions.filter(o => o.stance === "beneficial").length;
@@ -89,6 +118,12 @@ export default function AIOpinionDrop() {
           <p className="text-lg text-cyan-200/80 max-w-2xl mx-auto">
             EDUC-1300 Learning Frameworks Activity • Share Your Thoughts on Artificial Intelligence
           </p>
+          
+          {/* Live Connection Status */}
+          <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm mt-4 ${isConnected ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
+            <Wifi className="w-4 h-4" />
+            {isConnected ? '🔴 Live Sync Active' : '⚠️ Connection Issue'}
+          </div>
         </header>
 
         {/* Activity Instructions */}
@@ -118,17 +153,17 @@ export default function AIOpinionDrop() {
         <div className="grid grid-cols-3 gap-4 mb-8">
           <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-4 text-center">
             <Heart className="w-6 h-6 text-green-400 mx-auto mb-2" />
-            <div className="text-2xl font-bold text-green-400">{beneficialCount}</div>
+            <div className="text-2xl font-bold text-green-400">{isLoading ? '...' : beneficialCount}</div>
             <div className="text-xs text-green-300/70">Beneficial</div>
           </div>
           <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 text-center">
             <AlertTriangle className="w-6 h-6 text-red-400 mx-auto mb-2" />
-            <div className="text-2xl font-bold text-red-400">{detrimentalCount}</div>
+            <div className="text-2xl font-bold text-red-400">{isLoading ? '...' : detrimentalCount}</div>
             <div className="text-xs text-red-300/70">Detrimental</div>
           </div>
           <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4 text-center">
             <Zap className="w-6 h-6 text-yellow-400 mx-auto mb-2" />
-            <div className="text-2xl font-bold text-yellow-400">{neutralCount}</div>
+            <div className="text-2xl font-bold text-yellow-400">{isLoading ? '...' : neutralCount}</div>
             <div className="text-xs text-yellow-300/70">Neutral/Mixed</div>
           </div>
         </div>
@@ -240,23 +275,23 @@ export default function AIOpinionDrop() {
 
           {showSuccess && (
             <div className="mt-4 p-4 bg-green-500/10 border border-green-500/30 rounded-lg text-center">
-              <p className="text-green-400 font-semibold">✨ Opinion submitted successfully!</p>
+              <p className="text-green-400 font-semibold">✨ Opinion submitted! Live on all devices!</p>
             </div>
           )}
         </div>
 
-        {/* Submitted Opinions */}
+        {/* Submitted Opinions - Live Feed */}
         {opinions.length > 0 && (
           <div className="space-y-4">
             <h3 className="text-2xl font-bold flex items-center gap-2">
               <MessageSquare className="w-6 h-6 text-cyan-400" />
-              Class Opinions ({opinions.length})
+              Live Class Opinions ({opinions.length})
             </h3>
             <div className="grid gap-4">
               {opinions.map((opinion) => (
                 <div
                   key={opinion.id}
-                  className={`bg-slate-900/50 backdrop-blur-sm border rounded-xl p-4 ${
+                  className={`bg-slate-900/50 backdrop-blur-sm border rounded-xl p-4 animate-in fade-in slide-in-from-top-2 ${
                     opinion.stance === "beneficial"
                       ? "border-green-500/30"
                       : opinion.stance === "detrimental"
@@ -300,7 +335,7 @@ export default function AIOpinionDrop() {
         {/* Footer */}
         <footer className="mt-12 text-center text-slate-500 text-sm">
           <p>Created by b0lt 🤖 for EDUC-1300</p>
-          <p className="mt-1">Share this page with your classmates!</p>
+          <p className="mt-1">🔴 Live sync powered by Firebase</p>
         </footer>
       </div>
     </div>
