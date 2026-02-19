@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Bot, Brain, MessageSquare, Send, Users, Sparkles, Zap, Heart, AlertTriangle } from "lucide-react";
+import { Bot, Brain, MessageSquare, Send, Users, Sparkles, Zap, Heart, AlertTriangle, Trash2 } from "lucide-react";
 
 interface Opinion {
   id: string;
@@ -51,6 +51,10 @@ export default function AIOpinionDrop() {
     setIsSubmitting(false);
     setShowSuccess(true);
     setTimeout(() => setShowSuccess(false), 3000);
+  };
+
+  const handleDelete = (id: string) => {
+    setOpinions(opinions.filter(o => o.id !== id));
   };
 
   const beneficialCount = opinions.filter(o => o.stance === "beneficial").length;
@@ -265,17 +269,26 @@ export default function AIOpinionDrop() {
                       <span className="font-semibold text-white">{opinion.name}</span>
                       <span className="text-slate-400 text-sm"> + {opinion.partner}</span>
                     </div>
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        opinion.stance === "beneficial"
-                          ? "bg-green-500/20 text-green-400"
-                          : opinion.stance === "detrimental"
-                          ? "bg-red-500/20 text-red-400"
-                          : "bg-yellow-500/20 text-yellow-400"
-                      }`}
-                    >
-                      {opinion.stance.charAt(0).toUpperCase() + opinion.stance.slice(1)}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-medium ${
+                          opinion.stance === "beneficial"
+                            ? "bg-green-500/20 text-green-400"
+                            : opinion.stance === "detrimental"
+                            ? "bg-red-500/20 text-red-400"
+                            : "bg-yellow-500/20 text-yellow-400"
+                        }`}
+                      >
+                        {opinion.stance.charAt(0).toUpperCase() + opinion.stance.slice(1)}
+                      </span>
+                      <button
+                        onClick={() => handleDelete(opinion.id)}
+                        className="p-1 text-slate-500 hover:text-red-400 transition-colors"
+                        title="Delete this opinion"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
                   </div>
                   <p className="text-slate-300">{opinion.opinion}</p>
                 </div>
