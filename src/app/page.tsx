@@ -92,31 +92,25 @@ export default function AIOpinionDrop() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 text-white overflow-x-hidden">
-        {/* Animated Background - Enhanced with floating cute elements */}
+        {/* Animated Background - Elegant with floating stars */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-cyan-500/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse delay-1000" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-pink-500/10 rounded-full blur-3xl animate-pulse delay-2000" />
+        <div className="absolute top-20 left-10 w-72 h-72 bg-cyan-500/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-pink-500/10 rounded-full blur-3xl" />
         
-        {/* Floating cute robots */}
-        <div className="absolute top-40 left-20 animate-bounce delay-300">
-          <Bot className="w-8 h-8 text-cyan-400/40" />
+        {/* Floating decorative elements */}
+        <div className="absolute top-40 left-20 opacity-30">
+          <Star className="w-6 h-6 text-cyan-400" />
         </div>
-        <div className="absolute top-60 right-32 animate-bounce delay-700">
-          <Bot className="w-6 h-6 text-purple-400/40" />
+        <div className="absolute top-60 right-32 opacity-30">
+          <Star className="w-4 h-4 text-purple-400" />
         </div>
-        <div className="absolute bottom-40 left-40 animate-bounce delay-500">
-          <Bot className="w-10 h-10 text-pink-400/30" />
-        </div>
-        <div className="absolute top-1/3 right-20 animate-pulse delay-1000">
-          <Sparkles className="w-6 h-6 text-yellow-400/50" />
-        </div>
-        <div className="absolute bottom-1/3 right-1/4 animate-pulse delay-1500">
-          <Star className="w-5 h-5 text-cyan-400/40" />
+        <div className="absolute bottom-40 left-40 opacity-20">
+          <Bot className="w-8 h-8 text-pink-400" />
         </div>
         
-        {/* Floating stars */}
-        {[...Array(15)].map((_, i) => (
+        {/* Floating stars with subtle pulse */}
+        {[...Array(12)].map((_, i) => (
           <div
             key={i}
             className="absolute animate-pulse"
@@ -124,10 +118,10 @@ export default function AIOpinionDrop() {
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
               animationDelay: `${Math.random() * 3}s`,
-              animationDuration: `${2 + Math.random() * 2}s`
+              animationDuration: `${3 + Math.random() * 2}s`
             }}
           >
-            <Star className="w-3 h-3 text-yellow-400/30" />
+            <Star className="w-3 h-3 text-yellow-400/20" />
           </div>
         ))}
       </div>
@@ -136,119 +130,112 @@ export default function AIOpinionDrop() {
       <div className="fixed inset-0 bg-[linear-gradient(rgba(0,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,255,255,0.03)_1px,transparent_1px)] bg-[size:50px_50px] pointer-events-none" />
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 py-8">
-        {/* Header - Enhanced with bigger cute robot */}
+        {/* Header - Elegant with glowing robot */}
         <header className="text-center mb-12">
-          {/* Big bouncing robot mascot */}
+          {/* Big glowing robot mascot */}
           <div className="relative inline-block mb-6">
-            <div className="relative animate-bounce">
-              <div className="w-32 h-32 bg-gradient-to-br from-cyan-500/30 to-purple-500/30 rounded-3xl flex items-center justify-center border-2 border-cyan-400/50 shadow-2xl shadow-cyan-500/30">
+            <div className="relative">
+              <div className="w-32 h-32 bg-gradient-to-br from-cyan-500/30 to-purple-500/30 rounded-3xl flex items-center justify-center border-2 border-cyan-400/50 shadow-[0_0_30px_rgba(6,182,212,0.3)] hover:shadow-[0_0_50px_rgba(6,182,212,0.5)] transition-shadow duration-500">
                 <Bot className="w-20 h-20 text-cyan-400" />
               </div>
               <Sparkles className="w-8 h-8 text-yellow-400 absolute -top-2 -right-2 animate-pulse" />
-              <Star className="w-6 h-6 text-pink-400 absolute -bottom-1 -left-2 animate-pulse delay-300" />
-              <Heart className="w-5 h-5 text-red-400 absolute top-0 -left-4 animate-pulse delay-500" />
             </div>
           </div>
 
-          {/* Title with animated elements */}
+          {/* Title with subtle animations */}
           <div className="inline-flex items-center gap-4 mb-4 flex-wrap justify-center">
-            <Wand2 className="w-8 h-8 text-purple-400 animate-bounce delay-200 hidden md:block" />
+            <Wand2 className="w-8 h-8 text-purple-400 hidden md:block" />
             <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
               AI: Friend or Foe?
             </h1>
-            <Lightbulb className="w-8 h-8 text-yellow-400 animate-pulse delay-300 hidden md:block" />
+            <Lightbulb className="w-8 h-8 text-yellow-400 hidden md:block" />
           </div>
 
           {/* Animated subtitle */}
           <div className="flex items-center justify-center gap-2 mb-4">
-            <GraduationCap className="w-5 h-5 text-cyan-400 animate-bounce" />
+            <GraduationCap className="w-5 h-5 text-cyan-400" />
             <p className="text-lg text-cyan-200/80 max-w-2xl">
               EDUC-1300 Learning Frameworks Activity
             </p>
-            <GraduationCap className="w-5 h-5 text-purple-400 animate-bounce delay-200" />
           </div>
 
           <p className="text-md text-purple-200/70 mb-4">
             Share Your Thoughts on Artificial Intelligence 🤖💭
           </p>
           
-          {/* Cute live status with animation */}
-          <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm mt-2 ${isConnected ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'bg-red-500/20 text-red-400 border border-red-500/30'}`}>
-            <Wifi className="w-4 h-4 animate-pulse" />
+          {/* Live status with glow */}
+          <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm mt-2 ${isConnected ? 'bg-green-500/20 text-green-400 border border-green-500/30 shadow-[0_0_15px_rgba(34,197,94,0.3)]' : 'bg-red-500/20 text-red-400 border border-red-500/30'}`}>
+            <Wifi className="w-4 h-4" />
             {isConnected ? '🔴 Live Sync Active' : '⚠️ Connection Issue'}
-            {isConnected && <Rocket className="w-4 h-4 ml-1 animate-bounce" />}
+            {isConnected && <Rocket className="w-4 h-4 ml-1" />}
           </div>
         </header>
 
-        {/* Activity Instructions - Enhanced with cute animations */}
+        {/* Activity Instructions - Elegant with glow hover effects */}
         <div className="grid md:grid-cols-2 gap-6 mb-12">
-          <div className="bg-slate-900/50 backdrop-blur-sm border border-cyan-500/30 rounded-2xl p-6 hover:border-cyan-400/50 transition-all hover:scale-105 transform">
+          <div className="bg-slate-900/50 backdrop-blur-sm border border-cyan-500/30 rounded-2xl p-6 hover:border-cyan-400/50 hover:shadow-[0_0_20px_rgba(6,182,212,0.2)] transition-all duration-300">
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-cyan-500/20 rounded-xl animate-bounce">
+              <div className="p-2 bg-cyan-500/20 rounded-xl">
                 <Users className="w-8 h-8 text-cyan-400" />
               </div>
               <h2 className="text-xl font-bold text-cyan-300">Step 1: Pick a Partner</h2>
-              <Smile className="w-6 h-6 text-yellow-400 animate-pulse" />
+              <Smile className="w-6 h-6 text-yellow-400" />
             </div>
             <p className="text-slate-300">
-              Find a classmate to discuss with. Teams of 2 work best for deep conversation! 
-              <span className="inline-block animate-bounce ml-2">👥</span>
+              Find a classmate to discuss with. Teams of 2 work best for deep conversation! <span className="ml-2">👥</span>
             </p>
           </div>
 
-          <div className="bg-slate-900/50 backdrop-blur-sm border border-purple-500/30 rounded-2xl p-6 hover:border-purple-400/50 transition-all hover:scale-105 transform">
+          <div className="bg-slate-900/50 backdrop-blur-sm border border-purple-500/30 rounded-2xl p-6 hover:border-purple-400/50 hover:shadow-[0_0_20px_rgba(168,85,247,0.2)] transition-all duration-300">
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-purple-500/20 rounded-xl animate-bounce delay-200">
+              <div className="p-2 bg-purple-500/20 rounded-xl">
                 <MessageSquare className="w-8 h-8 text-purple-400" />
               </div>
               <h2 className="text-xl font-bold text-purple-300">Step 2: Discuss</h2>
-              <Brain className="w-6 h-6 text-pink-400 animate-pulse delay-300" />
+              <Brain className="w-6 h-6 text-pink-400" />
             </div>
             <p className="text-slate-300">
               Talk about: <span className="text-white font-semibold">"Do you think AI is beneficial or detrimental to society?"</span>
-              <span className="inline-block animate-pulse ml-2">💭</span>
+              <span className="ml-2">💭</span>
             </p>
           </div>
         </div>
 
-        {/* Stats Dashboard - Enhanced with cute animations */}
+        {/* Stats Dashboard - Elegant with glow effects */}
         <div className="grid grid-cols-3 gap-4 mb-8">
-          <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-4 text-center hover:scale-105 transition-transform">
-            <div className="inline-block p-2 bg-green-500/20 rounded-full mb-2 animate-bounce">
+          <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-4 text-center hover:border-green-400/50 hover:shadow-[0_0_20px_rgba(34,197,94,0.2)] transition-all duration-300">
+            <div className="inline-block p-2 bg-green-500/20 rounded-full mb-2">
               <Heart className="w-6 h-6 text-green-400" />
             </div>
             <div className="text-2xl font-bold text-green-400">{isLoading ? '...' : beneficialCount}</div>
             <div className="text-xs text-green-300/70">Beneficial</div>
-            <Sparkles className="w-4 h-4 text-green-400/50 mx-auto mt-1 animate-pulse" />
           </div>
-          <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 text-center hover:scale-105 transition-transform">
-            <div className="inline-block p-2 bg-red-500/20 rounded-full mb-2 animate-bounce delay-100">
+          <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 text-center hover:border-red-400/50 hover:shadow-[0_0_20px_rgba(239,68,68,0.2)] transition-all duration-300">
+            <div className="inline-block p-2 bg-red-500/20 rounded-full mb-2">
               <AlertTriangle className="w-6 h-6 text-red-400" />
             </div>
             <div className="text-2xl font-bold text-red-400">{isLoading ? '...' : detrimentalCount}</div>
             <div className="text-xs text-red-300/70">Detrimental</div>
-            <Sparkles className="w-4 h-4 text-red-400/50 mx-auto mt-1 animate-pulse delay-200" />
           </div>
-          <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4 text-center hover:scale-105 transition-transform">
-            <div className="inline-block p-2 bg-yellow-500/20 rounded-full mb-2 animate-bounce delay-200">
+          <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4 text-center hover:border-yellow-400/50 hover:shadow-[0_0_20px_rgba(234,179,8,0.2)] transition-all duration-300">
+            <div className="inline-block p-2 bg-yellow-500/20 rounded-full mb-2">
               <Zap className="w-6 h-6 text-yellow-400" />
             </div>
             <div className="text-2xl font-bold text-yellow-400">{isLoading ? '...' : neutralCount}</div>
             <div className="text-xs text-yellow-300/70">Neutral/Mixed</div>
-            <Sparkles className="w-4 h-4 text-yellow-400/50 mx-auto mt-1 animate-pulse delay-400" />
           </div>
         </div>
 
-        {/* Submission Form - Enhanced with cute animations */}
-        <div className="bg-slate-900/80 backdrop-blur-md border border-cyan-500/20 rounded-2xl p-6 md:p-8 mb-8 hover:border-cyan-400/30 transition-all">
+        {/* Submission Form - Elegant with glow effects */}
+        <div className="bg-slate-900/80 backdrop-blur-md border border-cyan-500/20 rounded-2xl p-6 md:p-8 mb-8 hover:border-cyan-400/30 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-300">
           <h3 className="text-2xl font-bold mb-6 flex items-center gap-3 justify-center">
-            <div className="p-2 bg-cyan-500/20 rounded-xl animate-bounce">
+            <div className="p-2 bg-cyan-500/20 rounded-xl">
               <Send className="w-6 h-6 text-cyan-400" />
             </div>
             <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
               Drop Your Opinion
             </span>
-            <Sparkles className="w-6 h-6 text-yellow-400 animate-pulse" />
+            <Sparkles className="w-6 h-6 text-yellow-400" />
           </h3>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -350,30 +337,30 @@ export default function AIOpinionDrop() {
           </form>
 
           {showSuccess && (
-            <div className="mt-4 p-4 bg-green-500/10 border border-green-500/30 rounded-lg text-center animate-bounce">
+            <div className="mt-4 p-4 bg-green-500/10 border border-green-500/30 rounded-lg text-center shadow-[0_0_20px_rgba(34,197,94,0.2)]">
               <p className="text-green-400 font-semibold flex items-center justify-center gap-2">
                 ✨ Opinion submitted! 
-                <Sparkles className="w-4 h-4 animate-pulse" />
+                <Sparkles className="w-4 h-4" />
               </p>
               <p className="text-green-300/70 text-sm mt-1">Live on all devices! 🚀</p>
             </div>
           )}
         </div>
 
-        {/* Submitted Opinions - Live Feed - Enhanced */}
+        {/* Submitted Opinions - Live Feed - Elegant */}
         {opinions.length > 0 && (
           <div className="space-y-4">
             <h3 className="text-2xl font-bold flex items-center gap-3 justify-center mb-6">
-              <div className="p-2 bg-cyan-500/20 rounded-xl animate-pulse">
+              <div className="p-2 bg-cyan-500/20 rounded-xl">
                 <MessageSquare className="w-6 h-6 text-cyan-400" />
               </div>
               <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
                 Live Class Opinions
               </span>
-              <span className="px-3 py-1 bg-cyan-500/20 rounded-full text-cyan-400 text-lg animate-bounce">
+              <span className="px-3 py-1 bg-cyan-500/20 rounded-full text-cyan-400 text-lg">
                 {opinions.length}
               </span>
-              <Bot className="w-6 h-6 text-purple-400 animate-bounce delay-200" />
+              <Bot className="w-6 h-6 text-purple-400" />
             </h3>
             <div className="grid gap-4">
               {opinions.map((opinion, index) => (
@@ -429,36 +416,36 @@ export default function AIOpinionDrop() {
           </div>
         )}
 
-        {/* Footer - Enhanced with Ali branding and cute elements */}
+        {/* Footer - Clean elegant with Ali branding */}
         <footer className="mt-16 text-center">
           <div className="inline-flex items-center gap-3 px-6 py-4 bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-pink-500/10 rounded-2xl border border-cyan-500/20 mb-4">
-            <Crown className="w-6 h-6 text-yellow-400 animate-pulse" />
+            <Star className="w-6 h-6 text-yellow-400" />
             <span className="text-lg font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
               Created by Ali
             </span>
-            <Crown className="w-6 h-6 text-yellow-400 animate-pulse delay-200" />
+            <Star className="w-6 h-6 text-yellow-400" />
           </div>
           
           <div className="flex items-center justify-center gap-4 mb-4">
-            <Bot className="w-6 h-6 text-cyan-400 animate-bounce" />
+            <Bot className="w-6 h-6 text-cyan-400" />
             <span className="text-slate-400">×</span>
-            <Sparkles className="w-6 h-6 text-yellow-400 animate-pulse" />
+            <Sparkles className="w-6 h-6 text-yellow-400" />
             <span className="text-slate-400">×</span>
-            <Heart className="w-6 h-6 text-pink-400 animate-pulse delay-300" />
+            <Heart className="w-6 h-6 text-pink-400" />
           </div>
           
           <p className="text-slate-500 text-sm mb-2">
             EDUC-1300 Learning Frameworks
           </p>
           
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-green-500/10 rounded-full text-xs text-green-400">
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-green-500/10 rounded-full text-xs text-green-400 border border-green-500/20">
             <Wifi className="w-3 h-3" />
             🔴 Live sync powered by Firebase
-            <Gem className="w-3 h-3 animate-pulse" />
+            <Gem className="w-3 h-3" />
           </div>
           
           <div className="mt-6 text-xs text-slate-600">
-            <p className="animate-pulse">✨ Made with love for EDUC-1300 ✨</p>
+            <p>✨ Made with love for EDUC-1300 ✨</p>
           </div>
         </footer>
       </div>
