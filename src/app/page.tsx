@@ -13,6 +13,109 @@ interface Opinion {
   timestamp: Date;
 }
 
+// Animated Robot Component
+function AnimatedRobot() {
+  const [blink, setBlink] = useState(false);
+  const [hover, setHover] = useState(false);
+
+  useEffect(() => {
+    const blinkInterval = setInterval(() => {
+      setBlink(true);
+      setTimeout(() => setBlink(false), 200);
+    }, 3000 + Math.random() * 2000);
+    return () => clearInterval(blinkInterval);
+  }, []);
+
+  return (
+    <div 
+      className="relative cursor-pointer"
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+    >
+      {/* Glow effect */}
+      <div className={`absolute inset-0 bg-gradient-to-br from-cyan-500/40 to-purple-500/40 rounded-3xl blur-xl transition-all duration-500 ${hover ? 'scale-110 opacity-100' : 'scale-100 opacity-60'}`} />
+      
+      {/* Robot container with float animation */}
+      <div className={`relative w-32 h-32 bg-gradient-to-br from-cyan-500/30 to-purple-500/30 rounded-3xl flex items-center justify-center border-2 border-cyan-400/50 shadow-[0_0_30px_rgba(6,182,212,0.3)] transition-all duration-300 ${hover ? 'scale-110 shadow-[0_0_50px_rgba(6,182,212,0.6)]' : 'animate-bounce-slow'}`}>
+        
+        {/* Robot face */}
+        <div className="relative">
+          {/* Eyes container */}
+          <div className="flex gap-3 mb-2">
+            {/* Left eye */}
+            <div className={`w-5 h-5 bg-cyan-400 rounded-full transition-all duration-100 ${blink ? 'scale-y-10' : ''} ${hover ? 'scale-125 bg-cyan-300' : ''}`}>
+              <div className="w-2 h-2 bg-white rounded-full ml-1 mt-1" />
+            </div>
+            {/* Right eye */}
+            <div className={`w-5 h-5 bg-cyan-400 rounded-full transition-all duration-100 ${blink ? 'scale-y-10' : ''} ${hover ? 'scale-125 bg-cyan-300' : ''}`}>
+              <div className="w-2 h-2 bg-white rounded-full ml-1 mt-1" />
+            </div>
+          </div>
+          
+          {/* Mouth */}
+          <div className={`w-8 h-3 bg-cyan-400/50 rounded-full mx-auto transition-all duration-300 ${hover ? 'w-10 h-4 bg-cyan-300 rounded-full' : ''}`} />
+        </div>
+
+        {/* Antenna */}
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+          <div className="w-1 h-4 bg-cyan-400/50 mx-auto" />
+          <div className={`w-3 h-3 bg-cyan-400 rounded-full animate-pulse ${hover ? 'bg-pink-400' : ''}`} />
+        </div>
+      </div>
+
+      {/* Sparkles around robot */}
+      <Sparkles className={`w-6 h-6 text-yellow-400 absolute -top-2 -right-2 transition-all duration-300 ${hover ? 'scale-150 rotate-12' : 'animate-pulse'}`} />
+      <Star className={`w-4 h-4 text-purple-400 absolute -bottom-1 -left-2 transition-all duration-500 ${hover ? 'scale-150' : 'animate-spin-slow'}`} />
+    </div>
+  );
+}
+
+// Moving Stars Background Component
+function MovingStars() {
+  const [stars, setStars] = useState<{id: number; x: number; y: number; size: number; speed: number}[]>([]);
+
+  useEffect(() => {
+    const newStars = Array.from({ length: 20 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: 2 + Math.random() * 4,
+      speed: 0.2 + Math.random() * 0.5
+    }));
+    setStars(newStars);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setStars(prev => prev.map(star => ({
+        ...star,
+        y: star.y - star.speed,
+        ...(star.y < -10 ? { y: 110, x: Math.random() * 100 } : {})
+      })));
+    }, 50);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="fixed inset-0 overflow-hidden pointer-events-none">
+      {stars.map(star => (
+        <div
+          key={star.id}
+          className="absolute transition-none"
+          style={{
+            left: `${star.x}%`,
+            top: `${star.y}%`,
+            width: star.size,
+            height: star.size,
+          }}
+        >
+          <Star className="w-full h-full text-yellow-400/30 animate-pulse" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function AIOpinionDrop() {
   const [opinions, setOpinions] = useState<Opinion[]>([]);
   const [formData, setFormData] = useState({
@@ -92,7 +195,8 @@ export default function AIOpinionDrop() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 text-white overflow-x-hidden">
-        {/* Animated Background - Elegant with floating stars */}
+        {/* Animated Background with Moving Stars */}
+      <MovingStars />
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-72 h-72 bg-cyan-500/20 rounded-full blur-3xl" />
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl" />
@@ -108,22 +212,6 @@ export default function AIOpinionDrop() {
         <div className="absolute bottom-40 left-40 opacity-20">
           <Bot className="w-8 h-8 text-pink-400" />
         </div>
-        
-        {/* Floating stars with subtle pulse */}
-        {[...Array(12)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute animate-pulse"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 3}s`,
-              animationDuration: `${3 + Math.random() * 2}s`
-            }}
-          >
-            <Star className="w-3 h-3 text-yellow-400/20" />
-          </div>
-        ))}
       </div>
 
       {/* Grid Pattern Overlay */}
@@ -132,15 +220,8 @@ export default function AIOpinionDrop() {
       <div className="relative z-10 max-w-6xl mx-auto px-4 py-8">
         {/* Header - Elegant with glowing robot */}
         <header className="text-center mb-12">
-          {/* Big glowing robot mascot */}
-          <div className="relative inline-block mb-6">
-            <div className="relative">
-              <div className="w-32 h-32 bg-gradient-to-br from-cyan-500/30 to-purple-500/30 rounded-3xl flex items-center justify-center border-2 border-cyan-400/50 shadow-[0_0_30px_rgba(6,182,212,0.3)] hover:shadow-[0_0_50px_rgba(6,182,212,0.5)] transition-shadow duration-500">
-                <Bot className="w-20 h-20 text-cyan-400" />
-              </div>
-              <Sparkles className="w-8 h-8 text-yellow-400 absolute -top-2 -right-2 animate-pulse" />
-            </div>
-          </div>
+          {/* Big animated robot mascot */}
+          <AnimatedRobot />
 
           {/* Title with subtle animations */}
           <div className="inline-flex items-center gap-4 mb-4 flex-wrap justify-center">
@@ -163,12 +244,12 @@ export default function AIOpinionDrop() {
             Share Your Thoughts on Artificial Intelligence 🤖💭
           </p>
           
-          {/* Live status with glow */}
-          <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm mt-2 ${isConnected ? 'bg-green-500/20 text-green-400 border border-green-500/30 shadow-[0_0_15px_rgba(34,197,94,0.3)]' : 'bg-red-500/20 text-red-400 border border-red-500/30'}`}>
+          {/* Live status hidden as requested */}
+          {/* <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm mt-2 ${isConnected ? 'bg-green-500/20 text-green-400 border border-green-500/30 shadow-[0_0_15px_rgba(34,197,94,0.3)]' : 'bg-red-500/20 text-red-400 border border-red-500/30'}`}>
             <Wifi className="w-4 h-4" />
             {isConnected ? '🔴 Live Sync Active' : '⚠️ Connection Issue'}
             {isConnected && <Rocket className="w-4 h-4 ml-1" />}
-          </div>
+          </div> */}
         </header>
 
         {/* Activity Instructions - Elegant with glow hover effects */}
@@ -416,35 +497,29 @@ export default function AIOpinionDrop() {
           </div>
         )}
 
-        {/* Footer - Clean elegant with Ali branding */}
-        <footer className="mt-16 text-center">
-          <div className="inline-flex items-center gap-3 px-6 py-4 bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-pink-500/10 rounded-2xl border border-cyan-500/20 mb-4">
-            <Star className="w-6 h-6 text-yellow-400" />
-            <span className="text-lg font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+        {/* Footer - Smaller Ali branding */}
+        <footer className="mt-12 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-pink-500/10 rounded-xl border border-cyan-500/20 mb-3">
+            <Star className="w-4 h-4 text-yellow-400" />
+            <span className="text-sm font-semibold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
               Created by Ali
             </span>
-            <Star className="w-6 h-6 text-yellow-400" />
+            <Star className="w-4 h-4 text-yellow-400" />
           </div>
           
-          <div className="flex items-center justify-center gap-4 mb-4">
-            <Bot className="w-6 h-6 text-cyan-400" />
-            <span className="text-slate-400">×</span>
-            <Sparkles className="w-6 h-6 text-yellow-400" />
-            <span className="text-slate-400">×</span>
-            <Heart className="w-6 h-6 text-pink-400" />
+          <div className="flex items-center justify-center gap-3 mb-2">
+            <Bot className="w-4 h-4 text-cyan-400" />
+            <span className="text-slate-400 text-xs">×</span>
+            <Sparkles className="w-4 h-4 text-yellow-400" />
+            <span className="text-slate-400 text-xs">×</span>
+            <Heart className="w-4 h-4 text-pink-400" />
           </div>
           
-          <p className="text-slate-500 text-sm mb-2">
+          <p className="text-slate-500 text-xs mb-2">
             EDUC-1300 Learning Frameworks
           </p>
           
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-green-500/10 rounded-full text-xs text-green-400 border border-green-500/20">
-            <Wifi className="w-3 h-3" />
-            🔴 Live sync powered by Firebase
-            <Gem className="w-3 h-3" />
-          </div>
-          
-          <div className="mt-6 text-xs text-slate-600">
+          <div className="text-xs text-slate-600">
             <p>✨ Made with love for EDUC-1300 ✨</p>
           </div>
         </footer>
